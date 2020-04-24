@@ -37,6 +37,31 @@
                     "group": "9_cutcopypaste@4"
                 }
             ]
+        },
+        "configuration": {
+            "title": "Coding Picture Bed",
+            "properties": {
+                "coding-picbed.createDirectoryByDate": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "是否按照上传日期创建文件夹"
+                },
+                "coding-picbed.token": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Coding 个人访问令牌"
+                },
+                "coding-picbed.repositoryURL": {
+                    "type": "string",
+                    "default": "",
+                    "description": "仓库地址，例如：https://coding-demo.coding.net/p/coding-demo/d/coding-demo/git"
+                },
+                "coding-picbed.path": {
+                    "type": "string",
+                    "default": "/",
+                    "description": "仓库存放目录（若不存在自动创建）"
+                }
+            }
         }
     },
     "scripts": {
