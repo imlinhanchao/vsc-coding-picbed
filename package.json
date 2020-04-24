@@ -1,11 +1,21 @@
 {
     "name": "coding-picture-bed",
-    "displayName": "Coding Picture Bed",
-    "description": "Auto Upload Picture to Coding Repository and generate markdown.",
+    "publisher": "hancel",
+    "displayName": "Coding 图床",
+    "description": "自动将图片上传到 Coding 仓库并生成 Markdown 代码。",
     "version": "0.0.1",
     "engines": {
         "vscode": "^1.44.0"
     },
+    "keywords": [
+        "Coding",
+        "Picture",
+        "cdn",
+        "markdown"
+    ],
+    "repository": "https://github.com/imlinhanchao/vsc-coding-picbed",
+    "icon": "asserts/icon.png",
+    "license": "MIT",
     "categories": [
         "Other"
     ],
@@ -17,7 +27,7 @@
         "commands": [
             {
                 "command": "coding-picbed.paste",
-                "title": "粘贴图片到 Markdown",
+                "title": "粘贴图片",
                 "when": "editorLangId == markdown"
             }
         ],
@@ -51,7 +61,7 @@
                     "default": "",
                     "description": "Coding 个人访问令牌"
                 },
-                "coding-picbed.repositoryURL": {
+                "coding-picbed.repository": {
                     "type": "string",
                     "default": "",
                     "description": "仓库地址，例如：https://coding-demo.coding.net/p/coding-demo/d/coding-demo/git"

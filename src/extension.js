@@ -5,7 +5,8 @@ const { spawn } = require('child_process');
 const { tmpdir } = require('os');
 const fs = require('fs');
 const path = require('path');
-const package = require('../package');
+const packages = require('../package');
+const { Coding } = require('coding-picbed');
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -13,6 +14,16 @@ function activate(context) {
 
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated
+    let config = getConfig();
+    let coding = null;
+    let notice = context.globalState.get('notice') !== false;
+
+    if (config.token == '' || config.repository == '') {
+        if(notice) noticeSetting();
+    }
+    else
+        coding = new Coding({ token: config.token, repository: config.repository });
+
     console.log('Congratulations, your extension "coding-picture-bed" is now active!');
 
     // The command has been defined in the package.json file
@@ -20,17 +31,60 @@ function activate(context) {
     // The commandId parameter must match the command field in package.json
     let disposable = vscode.commands.registerCommand('coding-picbed.paste', async function () {
         // The code you place here will be executed every time your command is executed
+        try {
+            if (!coding) {
+                return noticeSetting();
+            }
 
-        let savePath = path.join(tmpdir(), 'coding-picbed');
-        if (!fs.existsSync(savePath)) fs.mkdirSync(savePath);
-        savePath = path.join(savePath, new Date().getTime() + '.png');
-        let images = await getPasteImage(savePath);
-        images = images.filter(img => ['.jpg', 'jpeg', '.gif', '.bmp', '.png'].find(ext => img.endsWith(ext)));
-        let config = getConfig();
+            while (!coding.isInitialized()) await sleep(100);   
 
+            config = getConfig();
+            let editor = vscode.window.activeTextEditor;
+            let savePath = path.join(tmpdir(), 'coding-picbed');
+            if (!fs.existsSync(savePath)) fs.mkdirSync(savePath);
+            savePath = path.join(savePath, new Date().getTime() + '.png');
+            let images = await getPasteImage(savePath);
+            images = images.filter(img => ['.jpg', 'jpeg', '.gif', '.bmp', '.png'].find(ext => img.endsWith(ext)));
+            
+            let now = new Date();
+            let saveDir = config.path;
+            if (config.createDirectoryByDate) saveDir = path.join(saveDir, `${now.getFullYear()}${('0' + (now.getMonth() + 1)).slice(-2)}${('0' + now.getDay()).slice(-2)}`).replace(/\\/g, '/');
+            
+            let urls = [];
+            for (let i = 0; i < images.length; i++) {
+                let data = await coding.upload(images[i], saveDir);
+                urls.push(data.urls[0]);
+            }
+            let selections = getSelections();
 
-        // Display a message box to the user
-        vscode.window.showInformationMessage(images.join('\n'));
+            let insertCode = '';
+            for (let i = 0; i < urls.length; i++) {
+                let selection = selections[i] && editor.document.getText(selections[i]) ? editor.document.getText(selections[i]) : '图' + i;
+                let text = ` ![${selection}](${urls[i].replace('http:', 'https:')}) `;
+                if (selections[i]) editor.edit(editBuilder => {
+                    editBuilder.replace(selections[i], text);
+                });
+                else insertCode += text + '\n';
+            }
+
+            if (insertCode) {
+                editor.edit(editBuilder => {
+                    editBuilder.insert(editor.selection.activate, insertCode.trim());
+                })
+            }
+        } catch (error) {
+            vscode.window.showErrorMessage(error.message);
+        }
+    });
+
+    vscode.workspace.onDidChangeConfiguration(function(event) {
+        const configList = ['token', 'repository'];
+
+        const affected = configList.some(item => event.affectsConfiguration(`coding-picbed.${item}`));
+        if (!affected) return;
+        config = getConfig();
+        if (!coding) coding = new Coding();
+        coding.config({ token: config.token, repository: config.repository })
     });
 
     context.subscriptions.push(disposable);
@@ -41,10 +95,35 @@ exports.activate = activate;
 function deactivate() {
 }
 
+function sleep (time) {
+    return new Promise((resolve) => setTimeout(resolve, time));
+}
+
+function noticeSetting() {
+    vscode.window.showInformationMessage('你需要去设置一下 Coding 账号的相关信息', '去设置', '不再提醒').then(result => {
+        if (result === '去设置') {
+            vscode.commands.executeCommand('workbench.action.openSettings', 'coding-picbed' );
+        } else if (result === '不再提示') {
+            context.globalState.update('notice', false);
+        }
+    });
+}
+
+function getSelections() {
+    let editor = vscode.window.activeTextEditor;
+    if (!editor) {
+        return ''; // No open text editor
+    }
+
+    let selections = editor.selections;
+    return selections;
+}
+
+
 function getConfig() {
-    let keys = Object.keys(package.contributes.configuration.properties);
+    let keys = Object.keys(packages.contributes.configuration.properties);
     let values = {};
-    keys.forEach(k => values[k] = vscode.workspace.getConfiguration().get(k))
+    keys.forEach(k => values[k.split('.')[1]] = vscode.workspace.getConfiguration().get(k))
     return values;
 }
 
@@ -59,6 +138,7 @@ function getPasteImage(imagePath) {
     
             let command = "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe";
             let powershellExisted = fs.existsSync(command)
+            let output = '';
             if (!powershellExisted) {
                 command = "powershell"
             }
@@ -84,7 +164,10 @@ function getPasteImage(imagePath) {
                 // console.log('exit', code, signal);
             });
             powershell.stdout.on('data', function (data) {
-                resolve(data.toString().trim().split('\n'));
+                if (data.toString().indexOf('Active code page:') < 0) output += data.toString();
+            });
+            powershell.on('close', function (code) {
+                resolve(output.trim().split('\n').map(i => i.trim()));
             });
         }
         else if (platform === 'darwin') {

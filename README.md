@@ -1,65 +1,42 @@
-# coding-picture-bed README
+# Coding 图床
 
-This is the README for your extension "coding-picture-bed". After writing up a brief description, we recommend including the following sections.
+基于 [Coding](https://coding.net/) API 与 Coding 代码仓库实现的 Coding 图床 VSCode 粘贴上传扩展。
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+首次使用请进入扩展设置界面配置 `Coding 个人访问令牌` 和 `Coding 仓库地址`。此扩展仅支援在 Markdown 中使用。
 
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+1. 可以使用快捷键 `Shift + Alt + V` (可配置) 或右键菜单 `粘贴图片` 。
+2. 可以直接粘贴截图或图片文件。
+3. 选中文本后粘贴，文本将被作为图片的 Alt 。
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+Linux 用户须安装 xclip.
+
+Ubuntu：
+```bash
+sudo apt install xclip
+```
+
+CentOS
+```bash
+sudo yum install epel-release.noarch
+sudo yum install xclip
+```
 
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+* `coding-picbed.createDirectoryByDate`: 是否将图片上传到以日期命名的文件夹。
+* `coding-picbed.token`: Coding 的[个人访问令牌](https://help.coding.net/docs/member/tokens.html)。
+* `coding-picbed.repository`: 存放图片的仓库。
+* `coding-picbed.path`: 存放图片的目录。
 
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
-
 ### 1.0.0
 
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
------------------------------------------------------------------------------------------------------------
-
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+完成初版。
 
 **Enjoy!**
