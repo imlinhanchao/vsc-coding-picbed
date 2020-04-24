@@ -10,16 +10,34 @@
         "Other"
     ],
     "activationEvents": [
-        "onCommand:extension.sayHello"
+        "onCommand:coding-picbed.paste"
     ],
     "main": "./src/extension",
     "contributes": {
         "commands": [
             {
                 "command": "coding-picbed.paste",
-                "title": "Paste Picture"
+                "title": "粘贴图片到 Markdown",
+                "when": "editorLangId == markdown"
             }
-        ]
+        ],
+        "keybindings": [
+            {
+                "command": "coding-picbed.paste",
+                "key": "alt+shift+v",
+                "mac": "alt+shift+v",
+                "when": "editorLangId == markdown"
+            }
+        ],
+        "menus": {
+            "editor/context": [
+                {
+                    "command": "coding-picbed.paste",
+                    "when": "editorLangId == markdown",
+                    "group": "9_cutcopypaste@4"
+                }
+            ]
+        }
     },
     "scripts": {
         "postinstall": "node ./node_modules/vscode/bin/install",
