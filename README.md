@@ -39,9 +39,13 @@ sudo yum install xclip
 
 ## Release Notes
 
+### 0.0.3
+
+1. 更新 Readme，以便使用更加清晰。
+
 ### 0.0.2
 
-1. 修正 Mac 无法粘贴图片问题。
+1. 修正 Mac 无法粘贴图片文件问题。
 2. 修正自动添加 Alt 计数总是 0 的问题。
 3. 在状态栏添加上传 loading。
 

@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to the "Coding Picture Bed" extension will be documented in this file.
 
+## [0.0.3] - 2020-04-25
+### Changed
+- Update Readme, make it more clear.
+
 ## [0.0.2] - 2020-04-25
 ### Added
 - Added upload loading.
