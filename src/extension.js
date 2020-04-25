@@ -17,6 +17,7 @@ function activate(context) {
     let config = getConfig();
     let coding = null;
     let notice = context.globalState.get('notice') !== false;
+    let index = 1;
 
     if (config.token == '' || config.repository == '') {
         if(notice) noticeSetting();
@@ -31,10 +32,15 @@ function activate(context) {
     // The commandId parameter must match the command field in package.json
     let disposable = vscode.commands.registerCommand('coding-picbed.paste', async function () {
         // The code you place here will be executed every time your command is executed
+        let stop;
         try {
             if (!coding) {
                 return noticeSetting();
             }
+
+            let selections = getSelections();
+
+            stop = showProgress('Coding 图床正在上传图片...');
 
             while (!coding.isInitialized()) await sleep(100);   
 
@@ -55,12 +61,11 @@ function activate(context) {
                 let data = await coding.upload(images[i], saveDir);
                 urls.push(data.urls[0]);
             }
-            let selections = getSelections();
 
             let insertCode = '';
             for (let i = 0; i < urls.length; i++) {
-                let selection = selections[i] && editor.document.getText(selections[i]) ? editor.document.getText(selections[i]) : '图' + i;
-                let text = ` ![${selection}](${urls[i].replace('http:', 'https:')}) `;
+                let selection = selections[i] && editor.document.getText(selections[i]) ? editor.document.getText(selections[i]) : '图' + index++;
+                let text = `![${selection}](${urls[i].replace('http:', 'https:')})`;
                 if (selections[i]) editor.edit(editBuilder => {
                     editBuilder.replace(selections[i], text);
                 });
@@ -72,8 +77,10 @@ function activate(context) {
                     editBuilder.insert(editor.selection.activate, insertCode.trim());
                 })
             }
+            stop();
         } catch (error) {
             vscode.window.showErrorMessage(error.message);
+            if (stop) stop();
         }
     });
 
@@ -83,6 +90,7 @@ function activate(context) {
         const affected = configList.some(item => event.affectsConfiguration(`coding-picbed.${item}`));
         if (!affected) return;
         config = getConfig();
+        if (config.token == '' || config.repository == '') return;
         if (!coding) coding = new Coding();
         coding.config({ token: config.token, repository: config.repository })
     });
@@ -93,6 +101,30 @@ exports.activate = activate;
 
 // this method is called when your extension is deactivated
 function deactivate() {
+}
+
+function showProgress(message) {
+    let show = true;
+    function stopProgress() {
+        show = false;
+    }
+
+    vscode.window.withProgress({
+        location: vscode.ProgressLocation.Window,
+        title: message,
+        cancellable: false
+    }, (progress, token) => {
+        
+        return new Promise(resolve => {
+            let timer = setInterval(() => {
+                if (show) return;
+                clearInterval(timer);
+                resolve();
+            }, 100)
+        });
+    })
+
+    return stopProgress;
 }
 
 function sleep (time) {
