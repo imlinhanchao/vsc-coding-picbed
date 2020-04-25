@@ -12,7 +12,7 @@
 
 ## Requirements
 
-Linux 用户须安装 xclip.
+Windows 用户可直接使用，Linux 用户须安装 xclip.
 
 Ubuntu：
 ```bash
@@ -29,9 +29,13 @@ sudo yum install xclip
 
 * `coding-picbed.createDirectoryByDate`: 是否将图片上传到以日期命名的文件夹。
 * `coding-picbed.token`: Coding 的[个人访问令牌](https://help.coding.net/docs/member/tokens.html)。
-* `coding-picbed.repository`: 存放图片的仓库。
+* `coding-picbed.repository`: 存放图片的仓库，如 `https://coding-demo.coding.net/p/coding-demo/d/coding-demo/git`。
 * `coding-picbed.path`: 存放图片的目录。
 
+## Tips
+
+如果以上配置好，在粘贴的时候提示“路径未找到”，可能是代码仓库还没有初始化。  
+可在仓库网页用 README `快速初始化仓库`。
 
 ## Release Notes
 
