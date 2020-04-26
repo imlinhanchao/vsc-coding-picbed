@@ -38,6 +38,10 @@ sudo yum install xclip
 
 ## Release Notes
 
+### 0.0.5
+
+1. 修正日期文件夹计算错误。
+   
 ### 0.0.4
 
 1. 更新 Readme，补充仓库的配置要求。
