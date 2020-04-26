@@ -20,7 +20,7 @@ function activate(context) {
     let index = 1;
 
     if (config.token == '' || config.repository == '') {
-        if(notice) noticeSetting();
+        if(notice) noticeSetting(context);
     }
     else
         coding = new Coding({ token: config.token, repository: config.repository });
@@ -35,7 +35,7 @@ function activate(context) {
         let stop;
         try {
             if (!coding) {
-                return noticeSetting();
+                return noticeSetting(context);
             }
 
             let selections = getSelections();
@@ -131,7 +131,7 @@ function sleep (time) {
     return new Promise((resolve) => setTimeout(resolve, time));
 }
 
-function noticeSetting() {
+function noticeSetting(context) {
     vscode.window.showInformationMessage('你需要去设置一下 Coding 账号的相关信息', '去设置', '不再提醒').then(result => {
         if (result === '去设置') {
             vscode.commands.executeCommand('workbench.action.openSettings', 'coding-picbed' );
