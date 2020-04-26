@@ -54,7 +54,8 @@ function activate(context) {
             
             let now = new Date();
             let saveDir = config.path;
-            if (config.createDirectoryByDate) saveDir = path.join(saveDir, `${now.getFullYear()}${('0' + (now.getMonth() + 1)).slice(-2)}${('0' + now.getDay()).slice(-2)}`).replace(/\\/g, '/');
+            if (config.createDirectoryByDate) saveDir = path.join(saveDir, 
+                `${now.getFullYear()}${(now.getMonth() + 1).toString().padStart(2, '0')}${(now.getDate()).toString().padStart(2, '0')}`);
             
             let urls = [];
             for (let i = 0; i < images.length; i++) {
