@@ -1,10 +1,14 @@
 # Change Log
 All notable changes to the "Coding Picture Bed" extension will be documented in this file.
 
+## [0.0.6] - 2020-04-27
+### Fixed
+- Fix only the first valid problem of pasting multiple files.
+
 ## [0.0.5] - 2020-04-26
 ### Fixed
 - Fix Date folder calculation error.
-- 
+
 ## [0.0.4] - 2020-04-25
 ### Changed
 - Update the Readme to supplement the configuration requirements of the warehouse.

@@ -38,6 +38,10 @@ sudo yum install xclip
 
 ## Release Notes
 
+### 0.0.6
+
+1. 修正粘贴多文件只有第一个有效问题。
+   
 ### 0.0.5
 
 1. 修正日期文件夹计算错误。

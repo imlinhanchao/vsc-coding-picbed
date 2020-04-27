@@ -3,9 +3,9 @@
     "publisher": "hancel",
     "displayName": "Coding 图床",
     "description": "自动将图片上传到 Coding 仓库并生成 Markdown 代码。",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "engines": {
-        "vscode": "^1.44.0"
+        "vscode": "^1.33.0"
     },
     "keywords": [
         "Coding",

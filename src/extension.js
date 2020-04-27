@@ -65,19 +65,21 @@ function activate(context) {
 
             let insertCode = '';
             for (let i = 0; i < urls.length; i++) {
-                let selection = selections[i] && editor.document.getText(selections[i]) ? editor.document.getText(selections[i]) : '图' + index++;
-                let text = `![${selection}](${urls[i].replace('http:', 'https:')})`;
-                if (selections[i]) editor.edit(editBuilder => {
-                    editBuilder.replace(selections[i], text);
-                });
-                else insertCode += text + '\n';
+                let selection = `图${index++}`;
+                if (selections && selections.length === 1 && editor.document.getText(selections[0])) {
+                    selection = `${editor.document.getText(selections[0])} ${i + 1}`;
+                }
+                else if(selections && selections[i] && editor.document.getText(selections[i]))
+                {
+                    selection = selections[i] && editor.document.getText(selections[i]);
+                }
+                
+                let text = `![${selection}](${urls[i].replace('http:', 'https:')})  \n`;
+                if (selections[i] && selections.length > 1) await editorEdit(selections[i], text);
+                else insertCode += text;
             }
 
-            if (insertCode) {
-                editor.edit(editBuilder => {
-                    editBuilder.insert(editor.selection.activate, insertCode.trim());
-                })
-            }
+            if (insertCode) await editorEdit(selections[0].active, insertCode);
             stop();
         } catch (error) {
             vscode.window.showErrorMessage(error.message);
@@ -152,6 +154,16 @@ function getSelections() {
     return selections;
 }
 
+function editorEdit(selection, text) {
+    return new Promise((resolve, reject) => {
+        vscode.window.activeTextEditor && 
+        vscode.window.activeTextEditor.edit(editBuilder => {
+            if(selection) {
+                editBuilder.replace(selection, text);
+            }
+        }).then(resolve);
+    });
+}
 
 function getConfig() {
     let keys = Object.keys(packages.contributes.configuration.properties);
