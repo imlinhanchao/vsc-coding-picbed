@@ -59,7 +59,7 @@ function activate(context) {
             
             let urls = [];
             for (let i = 0; i < images.length; i++) {
-                let data = await coding.upload(images[i], saveDir);
+                let data = await coding.upload(images[i], saveDir.replace(/\\/g, '/'));
                 urls.push(data.urls[0]);
             }
 

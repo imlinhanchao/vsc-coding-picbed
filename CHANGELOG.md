@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to the "Coding Picture Bed" extension will be documented in this file.
 
+## [0.0.7] - 2020-04-28
+### Fixed
+- Fix the problem of invalid upload address after setting upload directory.
+
 ## [0.0.6] - 2020-04-27
 ### Fixed
 - Fix only the first valid problem of pasting multiple files.
