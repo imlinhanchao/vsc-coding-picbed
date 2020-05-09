@@ -2,6 +2,10 @@
 
 基于 [Coding](https://coding.net/) API 与 Coding 代码仓库实现的 Coding 图床 VSCode 粘贴上传扩展。
 
+# Notice!!!
+
+**此项目已停止维护，建议更换最新开发的更加强大的 Markdown 图片扩展：[Markdown Image](https://marketplace.visualstudio.com/items?itemName=hancel.markdown-image)**
+
 ## Features
 
 首次使用请进入扩展设置界面配置 `Coding 个人访问令牌` 和 `Coding 仓库地址`，仓库至少需要设置共享源代码或部署静态网站服务。此扩展仅支援在 Markdown 中使用。
@@ -38,6 +42,10 @@ sudo yum install xclip
 
 ## Release Notes
 
+### 0.0.8
+
+1. 停止维护，请使用 [Markdown Image](https://marketplace.visualstudio.com/items?itemName=hancel.markdown-image)。
+   
 ### 0.0.7
 
 1. 修正设置上传目录后上传地址无效问题。

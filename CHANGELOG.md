@@ -1,6 +1,9 @@
 # Change Log
 All notable changes to the "Coding Picture Bed" extension will be documented in this file.
 
+## [0.0.8] - 2020-05-09
+- Stop maintenance, please use [Markdown Image](https://marketplace.visualstudio.com/items?itemName=hancel.markdown-image).
+
 ## [0.0.7] - 2020-04-28
 ### Fixed
 - Fix the problem of invalid upload address after setting upload directory.
